@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  osc_server:
+    build: ./osc_server
+    image: osc_server:latest
+    container_name: osc_server
+    ports:
+      - "9001:9001"
+    volumes:
+      - ./osc_server:/app
+
+  osc_client_python:
+    build: ./osc_client_python
+    image: osc_client_python:latest
+    container_name: osc_client_python
+    volumes:
+      - ./osc_client_python:/app
+    depends_on:
+      - osc_server
+
+  osc_client_php:
+    build: ./osc_client_php
+    image: osc_client_php:latest
+    volumes:
+      - ./osc_client_php:/var/www/html
+    depends_on:
+      - osc_server
+  
+networks:
+  default:
+    driver: bridge
